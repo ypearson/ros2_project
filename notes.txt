@@ -1,0 +1,147 @@
+## ROS2 Notes
+
+RCL - ROS Client Library
+rcl -> rclcpp
+rcl -> rclpy
+
+****INSTALL********************************************************************
+sudo snap install code --classic
+install cmake, python, C++ extensions for vs code
+
+# Install instructions
+https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html
+
+# Required
+sudo apt install python3-pip
+sudo apt install python3-colcon-common-extensions
+
+# Downgrade to fix warning on colcon build
+pip list | grep setuptools
+setuptools                               59.6.0
+pip install setuptools==58.2.0
+
+# Source scripts
+source /opt/ros/humble/setup.bash # 1/3
+source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash # 2/3
+source install/setup.bash # 3/3
+
+****DEMO***********************************************************************
+# Runing demos
+ros2 run demo_nodes_cpp talker
+ros2 run demo_nodes_cpp listener
+
+# See what nodes are online graphically
+rqt_graph
+
+# Turle demo
+ros2 run turtlesim turtlesim_node
+ros2 run turtlesim turtle_teleop_key
+
+****CREATE WORKSPACE***********************************************************
+# Make required folder `src`
+mkdir -p ros2_ws/src
+cd ros2_ws
+colcon build
+
+# This folders are created after build
+> build  install  log  src
+
+# Yet another source script to run
+source install/setup.bash
+
+****CREATE ROS PACKAGE*********************************************************
+PACKAGE_NAME=my_py_pkg
+cd src && \
+ros2 pkg create $PACKAGE_NAME --build-type ament_python --dependencies rclpy
+cd ..
+
+PACKAGE_NAME=my_cpp_pkg
+cd src && \
+ros2 pkg create $PACKAGE_NAME --build-type ament_cmake --dependencies rclcpp
+cd ..
+
+# Build package
+~/ros2_ws$ colcon build
+~/ros2_ws$ colcon build --packages-select my_py_pkg
+~/ros2_ws$ colcon build --symlink-install
+
+Starting >>> PACKAGE_NAME
+Finished <<< PACKAGE_NAME [0.68s]
+
+Summary: 1 package finished [1.17s]
+
+ros2 run my_robot_controller test_node
+
+ros2 				# command-line tool for ROS 2
+run 				# run a package specific executable
+my_robot_controller # Package name
+test_node			# entry_point, see ros2_ws/src/my_robot_controller/setup.py
+
+
+****ROS2 CMDS******************************************************************
+# Run test node
+ros2 run my_py_pkg py_node
+
+# Various ros2 commands
+
+ros2 node list
+ros2 topic list
+ros2 topic info /chatter
+ros2 topic info /turtle1/cmd_vel
+
+ros2 interface show std_msgs/msg/String
+ros2 interface show geometry_msgs/msg/Twist
+
+# This expresses velocity in free space broken into its linear and angular parts.
+Vector3  linear
+	float64 x
+	float64 y
+	float64 z
+Vector3  angular
+	float64 x
+	float64 y
+	float64 z
+
+# To get Twist message
+from geometry_msgs.msg import Twist
+
+# Add dependency to `package.xml`
+
+`<depend>geometry_msgs</depend>`
+
+# Listen to topic on command line
+
+ros2 topic echo /turtle1/pose
+
+# Information on pose topic
+ros2 topic info /turtle1/pose
+
+# Services
+
+ros2 run demo_nodes_cpp add_two_ints_server
+ros2 service list
+ros2 service type /add_two_ints
+ros2 interface show example_interfaces/srv/AddTwoInts
+
+int64 a
+int64 b
+---
+int64 sum
+
+ros2 service call  /add_two_ints example_interfaces/srv/AddTwoInts "{'a':2,'b':5}"
+
+ros2 service type /turtle1/set_pen
+ros2 interface show turtlesim/srv/SetPen
+
+uint8 r
+uint8 g
+uint8 b
+uint8 width
+uint8 off
+---
+
+# Get frequency of publications on a topic
+ros2 topic hz /turtle1/pos
+
+
+
