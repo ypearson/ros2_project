@@ -15,6 +15,9 @@ https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html
 sudo apt install python3-pip
 sudo apt install python3-colcon-common-extensions
 
+# Optional
+sudo apt install ros-humble-turtlesim
+
 # Downgrade to fix warning on colcon build
 pip list | grep setuptools
 setuptools                               59.6.0
@@ -31,6 +34,7 @@ ros2 run demo_nodes_cpp talker
 ros2 run demo_nodes_cpp listener
 
 # See what nodes are online graphically
+rqt
 rqt_graph
 
 # Turle demo
@@ -63,7 +67,7 @@ cd ..
 # Build package
 ~/ros2_ws$ colcon build
 ~/ros2_ws$ colcon build --packages-select my_py_pkg
-~/ros2_ws$ colcon build --symlink-install
+~/ros2_ws$ colcon build --symlink-install # Only works is py file is `chmod +x`
 
 Starting >>> PACKAGE_NAME
 Finished <<< PACKAGE_NAME [0.68s]
@@ -81,6 +85,10 @@ test_node			# entry_point, see ros2_ws/src/my_robot_controller/setup.py
 ****ROS2 CMDS******************************************************************
 # Run test node
 ros2 run my_py_pkg py_node
+ros2 run my_cpp_pkg cpp_node
+
+# Set node name to `abc`
+ros2 run my_cpp_pkg cpp_node --ros-args --remap __node:=abc
 
 # Various ros2 commands
 
@@ -88,6 +96,7 @@ ros2 node list
 ros2 topic list
 ros2 topic info /chatter
 ros2 topic info /turtle1/cmd_vel
+ros2 topic echo TOPIC
 
 ros2 interface show std_msgs/msg/String
 ros2 interface show geometry_msgs/msg/Twist
@@ -144,4 +153,23 @@ uint8 off
 ros2 topic hz /turtle1/pos
 
 
+****CREATE NEW NODE************************************************************
 
+# Create new python file
+cd ros2_ws/src/my_py_pkg/my_py_pkg/
+touch robot_news_station.py
+chmod +x robot_news_station.py
+
+# Modify setup.py
+f'robot_news_station = {package_name}.robot_news_station:main',
+
+# Add dependencies to `package.xml`
+ <depend>example_interfaces</depend>
+
+# From `ros2_ws` folder
+colcon build --packages-select my_py_pkg --symlink-install # for python
+
+# For cpp node add this to cmake list
+`add_executable`
+`ament_target_dependencies`
+`install`

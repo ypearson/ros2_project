@@ -21,6 +21,8 @@ setup(
     entry_points={
         'console_scripts': [
             f'py_node = {package_name}.my_first_node:main',
+            f'robot_news_station = {package_name}.robot_news_station:main',
+            f'smartphone = {package_name}.smartphone:main',
         ],
     },
 )
