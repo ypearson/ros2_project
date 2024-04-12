@@ -101,6 +101,9 @@ ros2 topic echo TOPIC
 ros2 interface show std_msgs/msg/String
 ros2 interface show geometry_msgs/msg/Twist
 
+# Publish on a topic from the terminal
+ros2 topic pub -r 10 /robot_news example_interfaces/msg/String "{data: 'From the terminal'}"
+
 # This expresses velocity in free space broken into its linear and angular parts.
 Vector3  linear
 	float64 x
@@ -149,27 +152,46 @@ uint8 width
 uint8 off
 ---
 
-# Get frequency of publications on a topic
-ros2 topic hz /turtle1/pos
-
+# Get frequency/bandwidth of publications on a topic
+ros2 topic hz /robot_news
+ros2 topic bw /robot_news
 
 ****CREATE NEW NODE************************************************************
 
-# Create new python file
+# 1 Create new python file
 cd ros2_ws/src/my_py_pkg/my_py_pkg/
 touch robot_news_station.py
 chmod +x robot_news_station.py
 
-# Modify setup.py
+# 2 Modify setup.py
 f'robot_news_station = {package_name}.robot_news_station:main',
 
-# Add dependencies to `package.xml`
+# 3 Add dependencies to `package.xml`
  <depend>example_interfaces</depend>
 
-# From `ros2_ws` folder
+# 4 Build new node
 colcon build --packages-select my_py_pkg --symlink-install # for python
 
-# For cpp node add this to cmake list
+# 1 Create new cpp file
+touch ros2_ws/src/my_cpp_pkg/src/my_node.cpp
+
+# 2 Modify cmake list
+ros2_ws/src/my_cpp_pkg/CMakeLists.txt
+`find_package`
 `add_executable`
 `ament_target_dependencies`
 `install`
+
+# 3 Add dependencies to `package.xml`
+<depend>rclcpp</depend>
+
+# 4 Build node
+`colcon build`
+
+****ReMAP TOPIC/NODE AT RUNTIME************************************************
+
+# Rename node name and topic name, publisher example
+ros2 run my_cpp_pkg robot_news_station --ros-args -r __node:=my_station -r robot_news:=my_news
+
+# Rename topic name, subscriber example
+ros2 run my_py_pkg smartphone  --ros-args -r robot_news:=my_news

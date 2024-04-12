@@ -22,7 +22,8 @@ class RobotNewsStationNode : public rclcpp::Node {
  private:
   void publishNews(void) {
     auto msg = example_interfaces::msg::String();
-    msg.data = std::string("Hi, this is ") + robot_name + std::string(" from the robot News Station");
+    msg.data = std::string("Hi, this is ") + robot_name +
+               std::string(" from the robot News Station");
     publisher_->publish(msg);
   }
   const std::string robot_name{"R2D2"};

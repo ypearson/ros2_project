@@ -23,6 +23,8 @@ setup(
             f'py_node = {package_name}.my_first_node:main',
             f'robot_news_station = {package_name}.robot_news_station:main',
             f'smartphone = {package_name}.smartphone:main',
+            f'number_publisher = {package_name}.number_publisher:main',
+            f'number_counter = {package_name}.number_counter:main',
         ],
     },
 )
