@@ -28,6 +28,7 @@ setup(
             f'add_two_ints_server = {package_name}.add_two_ints_server:main',
             f'add_two_ints_client_no_oop = {package_name}.add_two_ints_client_no_oop:main',
             f'add_two_ints_client = {package_name}.add_two_ints_client:main',
+            f'hw_status_publisher = {package_name}.hw_status_publisher:main',
         ],
     },
 )
