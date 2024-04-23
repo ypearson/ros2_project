@@ -29,6 +29,8 @@ setup(
             f'add_two_ints_client_no_oop = {package_name}.add_two_ints_client_no_oop:main',
             f'add_two_ints_client = {package_name}.add_two_ints_client:main',
             f'hw_status_publisher = {package_name}.hw_status_publisher:main',
+            f'battery_node = {package_name}.battery:main',
+            f'led_node = {package_name}.led:main',
         ],
     },
 )

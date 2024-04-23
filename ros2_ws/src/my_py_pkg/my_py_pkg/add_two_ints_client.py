@@ -10,7 +10,6 @@ class AddTwoIntsClientNode(Node):
     def __init__(self):
         super().__init__(f'{node_name}')
         self.get_logger().info(f'{node_name} has started...')
-        self.client_ = self.create_client(AddTwoInts, 'add_two_ints')
         self.call_add_two_ints_server(6,7)
         self.call_add_two_ints_server(6,8)
         self.call_add_two_ints_server(6,9)
