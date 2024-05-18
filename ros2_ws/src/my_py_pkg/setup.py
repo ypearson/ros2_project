@@ -32,6 +32,7 @@ setup(
             f'battery_node = {package_name}.battery:main',
             f'led_node = {package_name}.led:main',
             'image_publisher = my_py_pkg.image_publisher:main',
+            'image_subscriber = my_py_pkg.image_subscriber:main',
         ],
     },
 )
