@@ -5,12 +5,25 @@ from sensor_msgs.msg import Image
 from std_msgs.msg import Header
 from cv_bridge import CvBridge
 import cv2
+import random
 
+# Assuming 'msg' is a sensor_msgs/Image message
+# cv_image = bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
+# Assuming 'cv_image' is a NumPy array representing an image
+# ros_image_msg = bridge.cv2_to_imgmsg(cv_image, encoding='bgr8')
+
+gnode_name = 'node'
+graph_node_count = 0
+graph_node_list = []
+random_graph_node = lambda: random.choice(graph_node_list)
+
+node_name = 'graph_node_image_generator'
 class ImagePublisher(Node):
     def __init__(self):
-        super().__init__('image_publisher')
-        self.publisher_ = self.create_publisher(GraphNodeData, 'image_topic', 10)
-        self.timer = self.create_timer(0.5, self.timer_callback)
+        super().__init__(f'{node_name}')
+        self.get_logger().info(f'{node_name} has started...')
+        self.publisher_ = self.create_publisher(GraphNodeData, 'graph_node_data', 10)
+        self.timer = self.create_timer(1.0, self.timer_callback)
         self.bridge = CvBridge()
         self.image_path = 'src/my_py_pkg/my_py_pkg/bike.jpg'
         self.get_logger().info('Image Publisher node has been started.')
