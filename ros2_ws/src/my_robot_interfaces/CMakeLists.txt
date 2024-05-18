@@ -17,7 +17,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/ComputeRectangleArea.srv"
   "srv/SetLed.srv"
   "msg/LedPanelStates.msg"
-  "msg/CustomImage.msg"
+  "msg/GraphNodeData.msg"
    DEPENDENCIES std_msgs sensor_msgs
 )
 
